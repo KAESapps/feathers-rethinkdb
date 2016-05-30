@@ -55,6 +55,11 @@ export default function parseQuery(service, reQuery, params) {
         case '$eq':
           subQuery = r.row(qField).eq(params[qField].$eq);
           break;
+        case '$pointInBbox':
+          var points = params[qField].$pointInBbox
+          var polygon = r.polygon(points[0], points[1], points[2], points[3])
+          subQuery = polygon.intersects(r.point(r.row(qField)(0), r.row(qField)(1)))
+          break;
       }
     } else {
       subQuery = r.row(qField).eq(qValue);
